@@ -24,6 +24,7 @@ jobs:
    - stage: Push Docker manifest
      env:
        - DOCKER_CLI_EXPERIMENTAL=enabled
+       - DOCKER_REPO=htli
      script:
        - if [ "$TRAVIS_OS_NAME" == "linux" -a ! -z "$TRAVIS_TAG" ]; then
            echo "Executing release-manifest on tag build $TRAVIS_TAG";
@@ -48,7 +49,7 @@ after_success:
   - if [ "$TRAVIS_BUILD_STAGE_NAME" == "test" -a "$TRAVIS_OS_NAME" == "linux" -a ! -z "$TRAVIS_TAG" ]; then
     echo "Executing release on tag build $TRAVIS_TAG";
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    ARCH=linux CPU_ARCH="$TRAVIS_CPU_ARCH" make release;
+    DOCKER_REPO=htli ARCH=linux CPU_ARCH="$TRAVIS_CPU_ARCH" make release;
     else
     echo "Not executing release on non-tag build";
     fi
